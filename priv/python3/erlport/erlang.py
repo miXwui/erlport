@@ -25,7 +25,7 @@
 # ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
 # POSSIBILITY OF SUCH DAMAGE.
 
-from inspect import getargspec
+from inspect import getfullargspec
 import sys
 from sys import exc_info
 from traceback import extract_tb
@@ -128,7 +128,9 @@ class MessageHandler(object):
 
     def _check_handler(self, handler):
         # getargspec will raise TypeError if handler is not a function
-        args, varargs, _keywords, defaults = getargspec(handler)
+        # getargspec was deprecated in Python 3.11. Replaced with getfullargspec 
+        # https://github.com/hdima/erlport/issues/60#issue-1382422587
+        args, varargs, _keywords, defaults = getfullargspec(handler)
         largs = len(args)
         too_much = largs > 1 and largs - len(default) > 1
         too_few = largs == 0 and varargs is None
